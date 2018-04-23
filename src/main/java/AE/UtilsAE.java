@@ -1,14 +1,14 @@
 package AE;
 
-import Regression.Utils;
+;
 import org.ejml.simple.SimpleMatrix;
 
 import java.util.List;
 import java.util.Random;
 
 public class UtilsAE {
-    public static SimpleMatrix X= new SimpleMatrix(Utils.readX1Normalizat("C:/Users/cosov/IdeaProjects/IAL3/src/main/resources/antrenare"));
-    public static SimpleMatrix Y= new SimpleMatrix(Utils.readYNormalizat("C:/Users/cosov/IdeaProjects/IAL3/src/main/resources/antrenare"));
+   /* public static SimpleMatrix X= new SimpleMatrix(Util.readX1Normalizat("C:/Users/cosov/IdeaProjects/IAL3/src/main/resources/antrenare"));
+    public static SimpleMatrix Y= new SimpleMatrix(Util.readYNormalizat("C:/Users/cosov/IdeaProjects/IAL3/src/main/resources/antrenare"));*/
     public static SimpleMatrix getMatrix(Cromozom c){
         double[][] b = new double[1][8];
         List<Gena> gene =c.getListaGene();
@@ -17,11 +17,11 @@ public class UtilsAE {
         }
         return new SimpleMatrix(b);
     }
-    public static  double LSE(Cromozom c, Integer yref){
+    public static double LSE(Cromozom c, Integer yref){
         SimpleMatrix B=getMatrix(c);
 
-        double se= B.mult(X.transpose()).transpose().minus(Y.cols(yref,yref+1)).elementPower(2).elementSum();
-        return se;
+        //double se= B.mult(X.transpose()).transpose().minus(Y.cols(yref,yref+1)).elementPower(2).elementSum();
+        return 0;
 
     }
     public static Double getRandomBetween0and1() {

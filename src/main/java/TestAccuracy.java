@@ -1,17 +1,6 @@
-import AE.UtilsAE;
-import Regression.Service;
-import Regression.Utils;
-import org.ejml.simple.SimpleMatrix;
-
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-
 public class TestAccuracy {
 
-    private double[][] antyN;
+   /* private double[][] antyN;
     private double[][] antx1N;
     private double[][] testX1;
     private double[][] testY;
@@ -24,10 +13,10 @@ public class TestAccuracy {
 
     private void init(){
         String url = "C:/Users/cosov/IdeaProjects/IALab3/src/main/resources/antrenare";
-        double[][] x1 = Utils.readX1(url);
-        double[][] y = Utils.readY(url);
-        double[][] yN = Utils.readYNormalizat(url);
-        double[][] x1N = Utils.readX1Normalizat(url);
+        double[][] x1 = Util.readX1(url);
+        double[][] y = Util.readY(url);
+        double[][] yN = Util.readYNormalizat(url);
+        double[][] x1N = Util.readX1Normalizat(url);
         double[] lse = new double[3];
         //for (int it = 0; it < 100; it++) {
 
@@ -120,5 +109,5 @@ public class TestAccuracy {
         }
 
         return accuracyAe;
-    }
+    }*/
 }

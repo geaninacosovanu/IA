@@ -1,30 +1,32 @@
-import Regression.DataRegresie;
-import Regression.Service;
-import Regression.Utils;
-import org.ejml.simple.SimpleMatrix;
-import AE.AE;
-import AE.Cromozom;
-
-import javax.xml.crypto.Data;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import Clasificare.Service;
+import Utils.Util;
 
 
 public class Main {
-    private static String url = "C:/Users/cosov/IdeaProjects/IALab3/src/main/resources/antrenare";
-    private static double[][] yN = Utils.readYNormalizat(url);
-    private static double[][] x1N = Utils.readX1Normalizat(url);
+
 
     public static void main(String[] args) {
 
-        test();
+        Service service = new Service();
+        Double[] coef = service.gradientDescendent(4, 0.001f);
+        Double[] date = new Double[6];
+        date[0]=68.61;
+        date[1]=15.08;
+        date[2]=63.01;
+        date[3]=53.53;
+        date[4]=123.43;
+        date[5]=39.5;
+        Double predicted=Util.sigmoid(Util.err(date,coef));
+        System.out.println(predicted);
+
+
+        //test();
         run();
 
     }
 
     private static void run() {
-        while (true) {
+  /*      while (true) {
             System.out.println();
             System.out.println("--------------------------------------------------------------------------------------------");
             System.out.println("Problema aproximării calităţii betonului pe baza ingredientelor folosite la prepararea lui.");
@@ -79,10 +81,10 @@ public class Main {
 
 
             }
-        }
+        }*/
     }
 
-    private static void ae(DataRegresie dr, Integer nrIndivizi, int nrGene, Integer nrIteratii, Double probabilitateMutatie) {
+   /* private static void ae(DataRegresie dr, Integer nrIndivizi, int nrGene, Integer nrIteratii, Double probabilitateMutatie) {
 
         Service service = new Service();
         dr = service.solveAE(dr, nrIndivizi, 8, nrIteratii, 0.0, probabilitateMutatie);
@@ -128,10 +130,10 @@ public class Main {
 
         System.out.println();
         System.out.println("3. algoritm evolutiv cu 100 de indivizi, 100 iteratii si 0.5 prob de mutatie");
-        /*double[] testAE = test.testAE();
+        *//*double[] testAE = test.testAE();
         for (int i = 0; i < testAE.length; i++)
-            System.out.print(testAE[i] + "% ");*/
-    }
+            System.out.print(testAE[i] + "% ");*//*
+    }*/
 
 
 }
