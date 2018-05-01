@@ -1,45 +1,46 @@
+import Clasificare.Service;
+import Utils.Diagnostic;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class TestAccuracy {
 
-   /* private double[][] antyN;
-    private double[][] antx1N;
-    private double[][] testX1;
-    private double[][] testY;
+    private Diagnostic[] Y;
+    private Double[][] X;
+    private Diagnostic[] antY;
+    private Double[][] antX;
+    private Double[][] testX;
+    private Diagnostic[] testY;
     Service service;
 
-    public TestAccuracy() {
-        service =new Service();
-
+    public TestAccuracy(Double[][] X, Diagnostic[] Y) {
+        this.X=X;
+        this.Y=Y;
     }
 
-    private void init(){
-        String url = "C:/Users/cosov/IdeaProjects/IALab3/src/main/resources/antrenare";
-        double[][] x1 = Util.readX1(url);
-        double[][] y = Util.readY(url);
-        double[][] yN = Util.readYNormalizat(url);
-        double[][] x1N = Util.readX1Normalizat(url);
-        double[] lse = new double[3];
-        //for (int it = 0; it < 100; it++) {
-
-        List<Integer> all = initIndexes(x1.length);
+    private void init() {
+        List<Integer> all = initIndexes(X.length);
         int s = (int) (all.size() * 0.8);
-        double[][] antx = new double[s][8];
-        double[][] testx = new double[all.size() - s][8];
-        double[][] anty = new double[s][3];
-        double[][] testy = new double[all.size() - s][3];
+        this.antX = new Double[s][8];
+        this.testX = new Double[all.size() - s][8];
+        this.antY = new Diagnostic[s];
+        this.testY = new Diagnostic[all.size() - s];
         for (int i = 0; i < all.size(); i++) {
             if (i < s) {
-                antx[i] = x1N[all.get(i)];
-                anty[i] = yN[all.get(i)];
+                this.antX[i] = X[all.get(i)];
+                this.antY[i] = Y[all.get(i)];
             } else {
-                testx[i - s] = x1[all.get(i)];
-                testy[i - s] = y[all.get(i)];
+                this.testX[i - s] = X[all.get(i)];
+                this.testY[i - s] = Y[all.get(i)];
             }
         }
-        antx1N = antx;
-        antyN = anty;
-        testX1 = testx;
-        testY = testy;
+        service = new Service(this.antX, this.antY);
+
+
     }
+
     private List<Integer> initIndexes(Integer nr) {
         List<Integer> indexes = new ArrayList<>();
         for (int i = 0; i < nr; i++)
@@ -49,65 +50,36 @@ public class TestAccuracy {
     }
 
 
-
-    public double[] testLeastSquare() {
-        double[] accuracyLS=new double[3];
-        int n=100;
+    public Double[] testGradient() {
+        Double[] accuracyGr = new Double[3];
+        for (int i = 0; i < accuracyGr.length; i++)  accuracyGr[i]=0d;
+        int n = 10;
         for (int i = 0; i < n; i++) {
             init();
-            double[] testLSE=service.testLeastSquare(antx1N,antyN,testX1,testY);
-            for(int j=0;j<testLSE.length;j++)
-                accuracyLS[j]+=testLSE[j];
+            Double[] testGr = service.testGradient(testX, testY, 0.05f, 20);
+            for (int j = 0; j < testGr.length; j++)
+                accuracyGr[j] += testGr[j];
         }
-        for(int i=0;i<accuracyLS.length;i++){
-            accuracyLS[i]=accuracyLS[i]/n;
-        }
-        return accuracyLS;
-
-    }
-
-    public double[] testGradient() {
-        double[] accuracyGr=new double[3];
-        int n=100;
-        for (int i = 0; i < n; i++) {
-            init();
-            double[] testGr=service.testGradient(antx1N,antyN,testX1,testY,0.05f,20);
-            for(int j=0;j<testGr.length;j++)
-                accuracyGr[j]+=testGr[j];
-        }
-        for(int i=0;i<accuracyGr.length;i++){
-            accuracyGr[i]=accuracyGr[i]/n;
+        for (int i = 0; i < accuracyGr.length; i++) {
+            accuracyGr[i] = accuracyGr[i] / n;
         }
         return accuracyGr;
     }
 
-    public double[] testAE() {
-        double[] accuracyAe=new double[3];
-        int n=100;
-        PrintWriter writer = null;
-        try {
-            writer = new PrintWriter(new FileWriter("C:/Users/cosov/IdeaProjects/IALab3/src/main/resources/rez",true));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public Double[] testAE(){
+        Double[] accuracyAE = new Double[3];
+        for (int i = 0; i < accuracyAE.length; i++)  accuracyAE[i]=0d;
+        int n = 5;
         for (int i = 0; i < n; i++) {
             init();
-            writer.println("Initializat date pt iteratia " + i);
-            writer.close();
-            double[] testAe=service.testAE(antx1N,antyN,testX1,testY,100,10,0.5);
-            try {
-                writer = new PrintWriter(new FileWriter("C:/Users/cosov/IdeaProjects/IALab3/src/main/resources/rez"),true);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            writer.println("Obtinut rezultate pt iteratia "+i);
-            for(int j=0;j<testAe.length;j++)
-                accuracyAe[j]+=testAe[j];
+            Double[] testGr = service.testAE(testX, testY,20,10,0.5);
+            for (int j = 0; j < testGr.length; j++)
+                accuracyAE[j] += testGr[j];
         }
-        for(int i=0;i<accuracyAe.length;i++){
-            accuracyAe[i]=accuracyAe[i]/n;
+        for (int i = 0; i < accuracyAE.length; i++) {
+            accuracyAE[i] = accuracyAE[i] / n;
         }
+        return accuracyAE;
+    }
 
-        return accuracyAe;
-    }*/
 }

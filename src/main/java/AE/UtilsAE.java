@@ -1,27 +1,29 @@
 package AE;
 
 ;
+import Utils.Diagnostic;
 import org.ejml.simple.SimpleMatrix;
 
 import java.util.List;
 import java.util.Random;
 
 public class UtilsAE {
-   /* public static SimpleMatrix X= new SimpleMatrix(Util.readX1Normalizat("C:/Users/cosov/IdeaProjects/IAL3/src/main/resources/antrenare"));
-    public static SimpleMatrix Y= new SimpleMatrix(Util.readYNormalizat("C:/Users/cosov/IdeaProjects/IAL3/src/main/resources/antrenare"));*/
+    public static double[][] X;
+    public static double[][] Y;
     public static SimpleMatrix getMatrix(Cromozom c){
-        double[][] b = new double[1][8];
+        double[][] b = new double[1][7];
         List<Gena> gene =c.getListaGene();
         for(int i=0;i<gene.size();i++){
             b[0][i]=gene.get(i).getValoare();
         }
         return new SimpleMatrix(b);
     }
-    public static double LSE(Cromozom c, Integer yref){
+    public static  double LSE(Cromozom c, Integer yref){
         SimpleMatrix B=getMatrix(c);
-
-        //double se= B.mult(X.transpose()).transpose().minus(Y.cols(yref,yref+1)).elementPower(2).elementSum();
-        return 0;
+        SimpleMatrix Xm = new SimpleMatrix(X);
+        SimpleMatrix Ym = new SimpleMatrix(Y);
+        double se= B.mult(Xm.transpose()).transpose().minus(Ym.cols(yref,yref+1)).elementPower(2).elementSum();
+        return se;
 
     }
     public static Double getRandomBetween0and1() {
