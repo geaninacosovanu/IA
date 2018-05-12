@@ -1,8 +1,6 @@
 package RNA;
 
-import RNA.Service;
 import Utils.Diagnostic;
-import Utils.ReadData;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,7 +19,7 @@ public class TestAccuracyRNA {
     public TestAccuracyRNA(Double[][] X, Diagnostic[] Y) {
         this.X = X;
         this.Y = Y;
-        service=new Service();
+        service = new Service();
     }
 
     private void init() {
@@ -60,7 +58,7 @@ public class TestAccuracyRNA {
         int n = 10;
         for (int i = 0; i < n; i++) {
             init();
-            Double test = service.testRNA(X,Y,testX, testY, 0.05f, 3,1000);
+            Double test = service.testRNA(X, Y, testX, testY, 0.05f, 3, 10);
             accuracy += test;
         }
 

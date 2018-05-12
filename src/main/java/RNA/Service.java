@@ -38,7 +38,7 @@ public class Service {
                 Xn[i][j] = X[i][j];
             }
         normalizareX(Xn);
-        rna = new RNA(X[0].length, 3, 5, learningRate, Xn, Y);
+        rna = new RNA(X[0].length, 3, 2, learningRate, Xn, Y);
         rna.init();
         rna.train(n);
         Integer nr = 0;

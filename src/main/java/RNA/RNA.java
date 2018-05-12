@@ -50,22 +50,21 @@ public class RNA {
     }
 
 
-    //HERE!!
     private Double[] forwardPropagation(Double[] X) {
         List<Double> inputs = new ArrayList<>();
         for (int i = 0; i < X.length; i++)
             inputs.add(X[i]);
         for (ArrayList<Neuron> layer : layers) {
-            List<Double> newX = new ArrayList<Double>();
+            List<Double> newInputs = new ArrayList<Double>();
             for (Neuron n : layer) {
                 Double[] ret = new Double[inputs.size()];
                 for (int i = 0; i < inputs.size(); i++)
                     ret[i] = inputs.get(i);
                 Double activation = activate(ret, n.getWeights());
                 n.setOutput(transfer(activation));
-                newX.add(n.getOutput());
+                newInputs.add(n.getOutput());
             }
-            inputs = newX;
+            inputs = newInputs;
         }
         Double[] ret = new Double[inputs.size()];
         for (int i = 0; i < inputs.size(); i++)
@@ -87,14 +86,12 @@ public class RNA {
     }
 
     private void backwardPropagation(Double[] expected) {
-        for (int i = layers.size() - 1; i > 0; i--) {
+        for (int i = layers.size() - 1; i >= 0; i--) {
             ArrayList<Neuron> crtLayer = layers.get(i);
             List<Double> errors = new ArrayList<>();
             if (i == layers.size() - 1)
                 for (int j = 0; j < crtLayer.size(); j++) {
                     Neuron crtNeuron = crtLayer.get(j);
-
-                    //GET ATTENTION HERE
                     errors.add(expected[j] - crtNeuron.getOutput());
                 }
             else
@@ -103,6 +100,7 @@ public class RNA {
                     ArrayList<Neuron> nextLayer = layers.get(i + 1);
                     for (Neuron n : nextLayer)
                         crtError += n.getWeights().get(j) * n.getDelta();
+                    errors.add(crtError);
                 }
             for (int j = 0; j < crtLayer.size(); j++)
                 crtLayer.get(j).setDelta(errors.get(j) * transferInverse(crtLayer.get(j).getOutput()));
@@ -124,8 +122,8 @@ public class RNA {
             }
             for (Neuron n : layers.get(i)) {
                 for (int j = 0; j < inputs.size(); j++)
-                    n.setWeight(n.getWeights().get(i) * learningRate * n.getDelta() * inputs.get(j), i);
-                n.setWeight(n.getWeights().get(inputs.size() - 1) * learningRate * n.getDelta(), inputs.size() - 1);
+                    n.setWeight(n.getWeights().get(i) + learningRate * n.getDelta() * inputs.get(j), j);
+                n.setWeight(n.getWeights().get(inputs.size() - 1) + learningRate * n.getDelta(), inputs.size() - 1);
             }
         }
     }
@@ -168,16 +166,6 @@ public class RNA {
                     expected[1] = 0d;
                     expected[2] = 1d;
                 }
-                Double[] computedLabels = new Double[nrOutputs];
-                int m = 0;
-                Double max = computedOutput[0];
-                for (int k = 1; k < computedOutput.length; k++)
-                    if (computedOutput[k] > max) {
-                        max = computedOutput[k];
-                        m = k;
-                    }
-                computedLabels[m] = 1d;
-                computedOutput = computedLabels;
                 backwardPropagation(expected);
                 updateWeights(example);
             }
